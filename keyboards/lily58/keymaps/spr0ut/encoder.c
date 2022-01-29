@@ -16,6 +16,28 @@
 #include "spr0ut.h"
 
 #ifdef ENCODER_ENABLE
+
+void increase_brightness(void) {
+
+    int new_brightness = oled_get_brightness() + 10;
+    dprintf("Increasing brightness to %i \n",new_brightness);
+    if (new_brightness < 255) {
+        oled_set_brightness(new_brightness);
+    } else {
+        oled_set_brightness(255);
+    }
+}
+
+void decrease_brightness(void) {
+    int new_brightness = oled_get_brightness() - 10;
+    dprintf("Decreasing brightness to %i \n",new_brightness);
+    if (new_brightness > 0) {
+        oled_set_brightness(new_brightness);
+    } else {
+        oled_set_brightness(0);
+    }
+}
+
 void left_encoder_cw(void) {
     switch (get_highest_layer(layer_state)) {
         case _LOWER:
@@ -58,6 +80,7 @@ void right_encoder_cw(void) {
             break;
         case _ADJUST:
             // rgblight_decrease_val();
+            increase_brightness();
             break;
         default:
             tap_code(KC_MS_WH_UP);
@@ -74,6 +97,7 @@ void right_encoder_acw(void) {
             break;
         case _ADJUST:
             // rgblight_increase_val();
+            decrease_brightness();
             break;
         default:
             tap_code(KC_MS_WH_DOWN);
